@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 UserDetail userDetail = UserArrayList.get(i);
                 String login = userDetail.getLogin();
-
-                String image = userDetail.getAvatar_url();
+                String avtar_url = userDetail.getAvatar_url();
                Intent intent = new Intent(MainActivity.this,UserDetail_Activity.class);
                intent.putExtra("login",login);
+               intent.putExtra("avtar_url",avtar_url);
                startActivity(intent);
             }
         });
@@ -62,37 +62,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
        // Toast.makeText(this, "Username can't be empty", Toast.LENGTH_SHORT).show();
         int id = view.getId();
-        if(id == R.id.image){
+        if(id == R.id.image) {
+            String login = searchEditText.getText().toString();
             Retrofit.Builder builder = new Retrofit.Builder()
                     .baseUrl("https://api.github.com")
                     .addConverterFactory(GsonConverterFactory.create());
             Retrofit retrofit = builder.build();
             progressBar.setVisibility(View.VISIBLE);
             listView.setVisibility(View.INVISIBLE);
-            GitService Service =retrofit.create(GitService.class);
-            String login = searchEditText.getText().toString();
-            Log.d("login" ,login+" ");
-               Call<UserResponse>call = Service.findUsername(login);
-               call.enqueue(new Callback<UserResponse>(){
-                   @Override
-                   public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                       UserArrayList.clear();
+            GitService Service = retrofit.create(GitService.class);
+                Log.d("login", login + " ");
+                Call<UserResponse> call = Service.findUsername(login);
+                call.enqueue(new Callback<UserResponse>() {
+                    @Override
+                    public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                        UserArrayList.clear();
                         UserResponse userResponse = response.body();
-                        UserArrayList.addAll(userResponse.items);
-                       listView.setVisibility(View.VISIBLE);
-                       adapter.notifyDataSetChanged();
-                        Log.d("checkkkk","lksdfmlksd");
-                       progressBar.setVisibility(View.INVISIBLE);
+                        if(userResponse == null){
+                            progressBar.setVisibility(View.INVISIBLE);
+                            searchEditText.setError("username cant be null");
+                        }
+                        else {
+                            UserArrayList.addAll(userResponse.items);
+                            listView.setVisibility(View.VISIBLE);
+                            adapter.notifyDataSetChanged();
+                            Log.d("checkkkk", "lksdfmlksd");
+                            progressBar.setVisibility(View.INVISIBLE);
+                        }
+                    }
 
-                   }
-
-                   @Override
-                   public void onFailure(Call<UserResponse> call, Throwable t) {
-                        Log.d("checkkkk",t.getMessage());
-                        Log.d("checkkkk",t.getLocalizedMessage());
-                   }
-               });
+                    @Override
+                    public void onFailure(Call<UserResponse> call, Throwable t) {
+                        Log.d("checkkkk", t.getMessage());
+                        Log.d("checkkkk", t.getLocalizedMessage());
+                    }
+                });
+            }
         }
     }
 
-}
+

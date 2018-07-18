@@ -12,10 +12,8 @@ import retrofit2.http.Query;
 public interface GitService {
    @GET("/search/users")
     Call<UserResponse> findUsername(@Query("q") String login);
-
-//   @GET("/users/{username}/repos")
-//    Call<ArrayList<repo>>getRepos(@Path("login")String login);
-
-   @GET("/users/:username")
-    Call<Integer>getnoOfFollower();
+    @GET("/users/{username}")
+    Call<Users>findUsers(@Path("username")String username);
+    @GET("/users/{username}/repos")
+    Call<repoarray>getRepositery(@Path("username")String username);
 }

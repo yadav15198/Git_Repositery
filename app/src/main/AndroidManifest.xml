@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserDetail_Activity" />
-        <activity android:name=".repositeryActivity"></activity>
+        <activity android:name=".repositeryActivity"/>
     </application>
 
 </manifest>
