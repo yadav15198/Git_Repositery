@@ -31,8 +31,9 @@ public class repositeryActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_item1);
         repoArrayList = new ArrayList<>();
        // button = findViewById(R.id.button10);
-        listView.setAdapter(adapter);
         adapter = new repoAdapter(this,repoArrayList);
+        listView.setAdapter(adapter);
+
         progressBar = findViewById(R.id.progressbar10);
         Intent intent = getIntent();
        final String username = intent.getStringExtra("username");
@@ -44,13 +45,12 @@ public class repositeryActivity extends AppCompatActivity {
                    Retrofit retrofit = builder.build();
 
                    GitService service = retrofit.create(GitService.class);
-                   Call<repoarray> call = service.getRepositery(username);
-                   call.enqueue(new Callback<repoarray>() {
+                   Call<ArrayList<repo>> call = service.getRepositery(username);
+                   call.enqueue(new Callback<ArrayList<repo>>() {
                        @Override
-                       public void onResponse(Call<repoarray> call, Response<repoarray> response) {
+                       public void onResponse(Call<ArrayList<repo>> call, Response<ArrayList<repo>> response) {
                            repoArrayList.clear();
-                           repoarray repoarray = response.body();
-                           repoArrayList.addAll(repoarray.list);
+                           repoArrayList.addAll(response.body());
                            adapter.notifyDataSetChanged();
                            listView.setVisibility(View.VISIBLE);
                            progressBar.setVisibility(View.INVISIBLE);
@@ -59,7 +59,9 @@ public class repositeryActivity extends AppCompatActivity {
                        }
 
                        @Override
-                       public void onFailure(Call<repoarray> call, Throwable t) {
+                       public void onFailure(Call<ArrayList<repo>> call, Throwable t) {
+
+                           Log.d("check",t.getMessage());
 
                        }
                    });

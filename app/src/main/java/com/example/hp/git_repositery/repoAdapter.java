@@ -35,17 +35,17 @@ public class repoAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View output = convertView;
-        output = inflater.inflate(R.layout.repo_activity,parent,false);
         if(output == null){
-            TextView name = output.findViewById(R.id.reponewTextview);
+            output = inflater.inflate(R.layout.repo_activity,parent,false);
+            TextView Name = output.findViewById(R.id.reponewTextview);
 
             repoviewHolder holder = new repoviewHolder();
-            holder.name = name;
+            holder.name = Name;
             output.setTag(holder);
         }
        repoviewHolder holder = (repoviewHolder) output.getTag();
-        repo repo = repolist.get(position);
-        holder.name.setText(repo.name);
+        repo repositery = repolist.get(position);
+        holder.name.setText(repositery.name);
         return output;
     }
 }

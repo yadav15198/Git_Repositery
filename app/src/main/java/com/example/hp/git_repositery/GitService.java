@@ -15,5 +15,5 @@ public interface GitService {
     @GET("/users/{username}")
     Call<Users>findUsers(@Path("username")String username);
     @GET("/users/{username}/repos")
-    Call<repoarray>getRepositery(@Path("username")String username);
+    Call<ArrayList<repo>>getRepositery(@Path("username")String username);
 }
